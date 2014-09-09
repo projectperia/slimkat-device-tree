@@ -254,7 +254,7 @@ on boot
 # msm specific files that need to be created on /data
 on post-fs-data
     # we will remap this as /mnt/sdcard with the sdcard fuse tool
-    mkdir /data/media 0775 media_rw media_rw
+    mkdir /data/media 0770 media_rw media_rw
     chown media_rw media_rw /data/media
 
     mkdir /data/footprint 0750 root log
@@ -467,7 +467,7 @@ service sdcard /system/bin/sdcard -u 1023 -g 1023 -l /data/media /mnt/shell/emul
     class late_start
     
 # LGE_CHANGE_S, G2-FS@lge.com, 2013-10-30, fuse for external_SD
-service fuse_sdcard1 /system/bin/sdcard -u 1023 -g 1023 -w 1023 -d /mnt/media_rw/sdcard1 /storage/sdcard1
+service fuse_external_SD /system/bin/sdcard -u 1023 -g 1023 -w 1023 -d /mnt/media_rw/external_SD /storage/external_SD
     class late_start
     disabled
 # LGE_CHANGE_E, G2-FS@lge.com, 2013-10-30, fuse for external_SD    

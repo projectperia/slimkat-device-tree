@@ -21,6 +21,11 @@ $(call inherit-product, $(SRC_TARGET_DIR)/product/languages_full.mk)
 # Specific overlay
 DEVICE_PACKAGE_OVERLAYS += device/lge/d620/overlay
 
+# 
+PRODUCT_PROPERTY_OVERRIDES += \
+   ro.product.device=g2m \
+   ro.product.model=LG-D620 \
+
 # Permissions
 PRODUCT_COPY_FILES += \
     frameworks/native/data/etc/android.hardware.bluetooth_le.xml:system/etc/permissions/android.hardware.bluetooth_le.xml \
@@ -289,6 +294,10 @@ PRODUCT_PACKAGES += \
 PRODUCT_PROPERTY_OVERRIDES += \
     com.qc.hardware=true
 
+# simulate sdcard on /data/media
+PRODUCT_PROPERTY_OVERRIDES += \
+    persist.fuse_sdcard=true
+
 # Audio
 PRODUCT_PROPERTY_OVERRIDES += \
     persist.audio.fluence.mode=endfire \
@@ -361,7 +370,8 @@ PRODUCT_PROPERTY_OVERRIDES += \
     persist.radio.apm_sim_not_pwdn=1 \
     persist.radio.call_type=1 \
     ro.config.vc_call_vol_steps=7 \
-    ro.modem.no_wdog_chk=1
+    ro.modem.no_wdog_chk=1 \
+    telephony.lteOnCdmaDevice=1
 
 # NFC packages
 PRODUCT_PACKAGES += \
@@ -369,6 +379,9 @@ PRODUCT_PACKAGES += \
     Tag \
     nfc_nci.d620 \
     com.android.nfc_extras
+
+PRODUCT_PROPERTY_OVERRIDES += \
+    ro.nfc.port=I2C
 
 NFCEE_ACCESS_PATH := device/lge/d620/prebuilt/etc/nfcee_access.xml
 

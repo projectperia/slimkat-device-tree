@@ -50,9 +50,9 @@ TARGET_SCREEN_WIDTH := 540
 # Kernel image
 BOARD_KERNEL_SEPARATED_DT := true
 BOARD_CUSTOM_BOOTIMG_MK := device/lge/d620/mkbootimg.mk
-TARGET_KERNEL_SOURCE := kernel/lge/msm8226
+TARGET_KERNEL_SOURCE := kernel/lge/d620
 TARGET_KERNEL_CONFIG := cm11_g2m_defconfig
-#TARGET_KERNEL_CONFIG := g2m_global_com_defconfig
+# TARGET_KERNEL_CONFIG := g2m_global_com_defconfig
 BOARD_KERNEL_CMDLINE := console=ttyHSL0,115200,n8 androidboot.console=ttyHSL0 user_debug=31 msm_rtb.filter=0x37 androidboot.hardware=g2m
 BOARD_KERNEL_BASE := 0x00000000
 BOARD_KERNEL_PAGESIZE := 2048
@@ -158,7 +158,7 @@ BOARD_HAS_LARGE_FILESYSTEM := true
 
 # TWRP Recovery
 BOARD_HAS_NO_SELECT_BUTTON := true
-TARGET_RECOVERY_FSTAB := device/lge/d620/recovery.fstab
+TARGET_RECOVERY_FSTAB := device/lge/d620/rootdir/recovery.fstab
 RECOVERY_FSTAB_VERSION := 2
 TARGET_RECOVERY_PIXEL_FORMAT := "RGBX_8888"
 DEVICE_RESOLUTION := 540x960
@@ -183,8 +183,8 @@ BOARD_HAS_NO_MISC_PARTITION := true
 TARGET_RECOVERY_QCOM_RTC_FIX := true
 TW_SCREEN_BLANK_ON_BOOT := true
 
-PRODUCT_COPY_FILES += device/lge/d620/twrp.fstab:recovery/root/etc/twrp.fstab
-PRODUCT_COPY_FILES += device/lge/d620/extra.fstab:recovery/root/etc/extra.fstab
+PRODUCT_COPY_FILES += device/lge/d620/rootdir/twrp.fstab:recovery/root/etc/twrp.fstab
+PRODUCT_COPY_FILES += device/lge/d620/rootdir/extra.fstab:recovery/root/etc/extra.fstab
 
 # Nfc
 BOARD_NFC_HAL_SUFFIX := d620
