@@ -22,7 +22,7 @@ persist.radio.msgtunnel.start=false
 #
 # System props for telephony
 # System prop to turn on CdmaLTEPhone always
-# LGE_CHANGE_S by.mun@lge.com 2013-08-14 turn off CdmaLTEPhone for W7
+# LGE_CHANGE_S by.mun@lge.com 2013-08-14 turn on CdmaLTEPhone for d620
 telephony.lteOnCdmaDevice=1
 ro.telephony.default_network=0
 

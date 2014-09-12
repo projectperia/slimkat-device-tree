@@ -38,16 +38,13 @@ case "$serialno" in
     "")
     serialnum=`getprop ro.serialno`
     case "$serialnum" in
-        "")
-        serialnum=`cat /sys/class/android_usb/android0/iSerial_redi`
-        ;;
-        * ) ;;
+        "");; #Do nothing, use default serial number
+        *)
+        echo "$serialnum" > /sys/class/android_usb/android0/iSerial
     esac
-    echo "$serialnum" > /sys/class/android_usb/android0/iSerial
     ;;
     *)
     echo "$serialno" > /sys/class/android_usb/android0/iSerial
-    ;;
 esac
 
 chown -h root.system /sys/devices/platform/msm_hsusb/gadget/wakeup
@@ -83,31 +80,49 @@ case "$usbcurrentlimit" in
 	;;
     esac
 esac
-
 #
-# Allow USB enumeration with LGE default PID/VID
+# Allow USB enumeration with default PID/VID
 #
 echo 1  > /sys/class/android_usb/f_mass_storage/lun/nofua
 usb_config=`getprop persist.sys.usb.config`
-case "$usb_config" in
-    #USB persist config not set, select default configuration
-    "")
-        setprop persist.sys.usb.config charge_only
+bootmode=`getprop ro.bootmode`
+buildtype=`getprop ro.build.type`
+case "$bootmode" in
+    "bp-tools" )
+        setprop persist.sys.usb.config diag,serial_smd,serial_tty,rmnet,usbnet,adb
     ;;
-    "adb")
-        setprop persist.sys.usb.config charge_only,adb
+    "factory" )
+        setprop persist.sys.usb.config usbnet
     ;;
-    * ) ;; #USB persist config exists, do nothing
+    "qcom" )
+        setprop persist.sys.usb.config diag,serial_smd,serial_tty,rmnet_bam,mass_storage,adb
+    ;;
+    * )
+        case "$usb_config" in
+            "ptp,adb" | "mtp,adb" | "mass_storage,adb" | "ptp" | "mtp" | "mass_storage" )
+            ;;
+            *)
+                case "$buildtype" in
+                    "user" )
+                        setprop persist.sys.usb.config mtp
+                    ;;
+                    * )
+                        setprop persist.sys.usb.config mtp,adb
+                    ;;
+                esac
+            ;;
+        esac
+    ;;
 esac
 
 #
 # Add support for exposing lun0 as cdrom in mass-storage
 #
 target=`getprop ro.product.device`
-cdromname="/system/etc/cdrom_install.iso"
+cdromname="/dev/block/platform/msm_sdcc.1/by-name/cdrom"
 cdromenable=`getprop persist.service.cdrom.enable`
 case "$target" in
-        "msm7627a")
+        "msm8226" | "msm8610")
                 case "$cdromenable" in
                         0)
                                 echo "" > /sys/class/android_usb/android0/f_mass_storage/lun0/file
@@ -125,7 +140,19 @@ esac
 #
 case "$target" in
     "msm8974")
-        echo ssusb > /sys/bus/platform/devices/usb_bam/enable
+        echo hsusb > /sys/bus/platform/devices/usb_bam/enable
+    ;;
+    "apq8084")
+	if [ "$baseband" == "apq" ]; then
+		echo "msm_hsic_host" > /sys/bus/platform/drivers/xhci_msm_hsic/unbind
+	fi
+    ;;
+    "msm8226")
+         if [ -e /sys/bus/platform/drivers/msm_hsic_host ]; then
+             if [ ! -L /sys/bus/usb/devices/1-1 ]; then
+                 echo msm_hsic_host > /sys/bus/platform/drivers/msm_hsic_host/unbind
+             fi
+         fi
     ;;
 esac
 

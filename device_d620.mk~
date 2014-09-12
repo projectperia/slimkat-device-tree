@@ -52,16 +52,16 @@ PRODUCT_COPY_FILES += \
     frameworks/native/data/etc/android.hardware.bluetooth_le.xml:system/etc/permissions/android.hardware.bluetooth_le.xml \
     frameworks/native/data/etc/android.hardware.nfc.xml:system/etc/permissions/android.hardware.nfc.xml \
     frameworks/native/data/etc/android.hardware.nfc.hce.xml:system/etc/permissions/android.hardware.nfc.hce.xml \
-    frameworks/native/data/etc/com.android.nfc_extras.xml:system/etc/permissions/com.android.nfc_extras.xml \
-    device/lge/d620/prebuilt/etc/permissions/com.qualcomm.location.xml:system/etc/permissions/com.qualcomm.location.xml
+    frameworks/native/data/etc/com.android.nfc_extras.xml:system/etc/permissions/com.android.nfc_extras.xml
 
 # Configs
 PRODUCT_COPY_FILES += \
     device/lge/d620/prebuilt/etc/wifi/p2p_supplicant_overlay.conf:system/etc/wifi/p2p_supplicant_overlay.conf \
     device/lge/d620/prebuilt/etc/wifi/wpa_supplicant_overlay.conf:system/etc/wifi/wpa_supplicant_overlay.conf \
-    kernel/lge/d620/drivers/staging/prima/firmware_bin/WCNSS_cfg.dat:system/etc/firmware/wlan/prima/WCNSS_cfg.dat \
-    kernel/lge/d620/drivers/staging/prima/firmware_bin/WCNSS_qcom_cfg.ini:system/etc/firmware/wlan/prima/WCNSS_qcom_cfg.ini \
-    kernel/lge/d620/drivers/staging/prima/firmware_bin/WCNSS_qcom_cfg.ini:system/etc/wifi/WCNSS_qcom_cfg.ini \
+    device/lge/d620/prebuilt/etc/firmware/atmel/S0A47P1_2_07.fw:system/etc/firmware/atmel/S0A47P1_2_07.fw \
+    kernel/lge/msm8226/drivers/staging/prima/firmware_bin/WCNSS_cfg.dat:system/etc/firmware/wlan/prima/WCNSS_cfg.dat \
+    kernel/lge/msm8226/drivers/staging/prima/firmware_bin/WCNSS_qcom_cfg.ini:system/etc/firmware/wlan/prima/WCNSS_qcom_cfg.ini \
+    kernel/lge/msm8226/drivers/staging/prima/firmware_bin/WCNSS_qcom_cfg.ini:system/etc/wifi/WCNSS_qcom_cfg.ini \
     device/lge/d620/prebuilt/etc/wifi/WCNSS_qcom_wlan_nv.bin:system/etc/firmware/wlan/prima/WCNSS_qcom_wlan_nv.bin \
     device/lge/d620/prebuilt/etc/wifi/WCNSS_qcom_wlan_nv.bin:system/etc/wifi/WCNSS_qcom_wlan_nv.bin \
     device/lge/d620/prebuilt/etc/hostapd/hostapd.accept:system/etc/hostapd/hostapd.accept \
@@ -93,12 +93,14 @@ PRODUCT_COPY_FILES += \
     device/lge/d620/prebuilt/etc/nfcee_access.xml:system/etc/nfcee_access.xml \
     device/lge/d620/prebuilt/etc/quipc.conf:system/etc/quipc.conf \
 
+
 # Ramdisk
 PRODUCT_COPY_FILES += \
     device/lge/d620/rootdir/fstab.g2m:root/fstab.g2m \
     device/lge/d620/rootdir/fstab_f2fs.g2m:root/fstab_f2fs.g2m \
     device/lge/d620/rootdir/init.class_main.sh:root/init.class_main.sh \
     device/lge/d620/rootdir/init.lge.early.rc:root/init.lge.early.rc \
+    device/lge/d620/rootdir/init.lge.log.rc:root/init.lge.log.rc \
     device/lge/d620/rootdir/init.lge.rc:root/init.lge.rc \
     device/lge/d620/rootdir/init.mdm.sh:root/init.mdm.sh \
     device/lge/d620/rootdir/init.usb.rc:root/init.usb.rc \
@@ -292,6 +294,10 @@ PRODUCT_PACKAGES += \
 PRODUCT_PROPERTY_OVERRIDES += \
     com.qc.hardware=true
 
+# simulate sdcard on /data/media
+PRODUCT_PROPERTY_OVERRIDES += \
+    persist.fuse_sdcard=true
+
 # Audio
 PRODUCT_PROPERTY_OVERRIDES += \
     persist.audio.fluence.mode=endfire \
@@ -310,7 +316,7 @@ PRODUCT_PROPERTY_OVERRIDES += \
 # Media
 PRODUCT_PROPERTY_OVERRIDES += \
     lpa.decode=true \
-    qcom.hw.aac.encoder=true \
+    qcom.hw.aac.encoder=false \
     af.resampler.quality=255 \
     persist.audio.lowlatency.rec=false
 
@@ -365,7 +371,6 @@ PRODUCT_PROPERTY_OVERRIDES += \
     persist.radio.call_type=1 \
     ro.config.vc_call_vol_steps=7 \
     ro.modem.no_wdog_chk=1 \
-    persist.call_recording.enabled=1 \
     telephony.lteOnCdmaDevice=1
 
 # NFC packages
@@ -387,12 +392,6 @@ PRODUCT_PROPERTY_OVERRIDES += \
 # Enable KSM by default
 PRODUCT_PROPERTY_OVERRIDES += \
     ro.ksm.default=1
-
-# CmUpdater
-# PRODUCT_PROPERTY_OVERRIDES += \
-#     cm.updater.uri=http://api.quarx.cm-for.us/api \
-
-PRODUCT_BUILD_PROP_OVERRIDES += BUILD_UTC_DATE=0
 
 PRODUCT_LOCALES := en_US
 PRODUCT_LOCALES += hdpi
